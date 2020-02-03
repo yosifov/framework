@@ -7,8 +7,7 @@
         public HomePage(IWebDriver driver)
             : base(driver)
         {
+            this.ExpectedPageTitle = "Home - Ultimate QA";
         }
-
-        public override string InitialPageTitle => "Home - Ultimate QA";
     }
 }

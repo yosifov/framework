@@ -11,8 +11,8 @@
 
         protected IWebDriver Driver { get; set; }
 
-        public abstract string InitialPageTitle { get; }
+        public string ExpectedPageTitle { get; set; }
 
-        public bool IsVisible => this.Driver.Title == this.InitialPageTitle;
+        public bool IsVisible => this.Driver.Title == this.ExpectedPageTitle;
     }
 }
