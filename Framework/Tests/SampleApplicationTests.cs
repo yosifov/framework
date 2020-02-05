@@ -15,6 +15,7 @@ namespace Framework.Tests
         private IWebDriver driver;
         private Browser browser;
         private TestUser testUser;
+        private TestUser emergencyTestUser;
         private SampleApplicationPage sampleApplicationPage;
 
         [SetUp]
@@ -25,21 +26,21 @@ namespace Framework.Tests
             this.driver.Manage().Window.Maximize();
             this.sampleApplicationPage = new SampleApplicationPage(this.driver);
             this.testUser = new TestUser("Kamen", "Yosifov", Gender.Male);
+            this.emergencyTestUser = new TestUser("Emergency", "Name", Gender.Other);
         }
 
         [Test]
-        [TestCase(Gender.Male)]
-        [TestCase(Gender.Female)]
-        [TestCase(Gender.Other)]
-        public void SampleApplicationPageShouldOpenAndSubmitFormSuccessfully(Gender gender)
+        [TestCase(Gender.Male, Gender.Female)]
+        [TestCase(Gender.Female, Gender. Other)]
+        [TestCase(Gender.Other, Gender.Male)]
+        public void SampleApplicationPageShouldOpenAndSubmitFormSuccessfully(Gender testUserGender, Gender emergencyTestUserGender)
         {
-            this.sampleApplicationPage.Url = "https://ultimateqa.com/sample-application-lifecycle-sprint-3/";
-            this.sampleApplicationPage.ExpectedPageTitle = "Sample Application Lifecycle - Sprint 3 - Ultimate QA";
+            this.testUser.Gender = testUserGender;
+            this.emergencyTestUser.Gender = emergencyTestUserGender;
+
             this.sampleApplicationPage.Open();
-
-            this.testUser.Gender = gender;
-
-            var homePage = this.sampleApplicationPage.FillOutFormAndSubmit(this.testUser);
+            this.sampleApplicationPage.FillOutEmergencyContactForm(this.emergencyTestUser);
+            var homePage = this.sampleApplicationPage.FillOutPrimaryContactFormAndSubmit(this.testUser);
 
             Assert.That(homePage.IsVisible, "Home page was not visible.");
         }
