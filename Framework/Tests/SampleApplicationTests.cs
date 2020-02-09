@@ -1,12 +1,17 @@
 namespace Framework.Tests
 {
+    using AutomationResources;
+    using AutomationResources.Enums;
+
     using Core.Enums;
-    using Core.Factories;
-    using Pages;
+
+    using Models;
 
     using NUnit.Framework;
 
     using OpenQA.Selenium;
+
+    using Pages;
 
     [TestFixture]
     [Category("Sample Application")]
@@ -33,10 +38,10 @@ namespace Framework.Tests
         [TestCase(Gender.Male, Gender.Female)]
         [TestCase(Gender.Female, Gender. Other)]
         [TestCase(Gender.Other, Gender.Male)]
+        [Property("Author", "KamenYosifov")]
         public void SampleApplicationPageShouldOpenAndSubmitFormSuccessfully(Gender testUserGender, Gender emergencyTestUserGender)
         {
-            this.testUser.Gender = testUserGender;
-            this.emergencyTestUser.Gender = emergencyTestUserGender;
+            this.SetGenderToTestUsers(testUserGender, emergencyTestUserGender);
 
             this.sampleApplicationPage.Open();
             this.sampleApplicationPage.FillOutEmergencyContactForm(this.emergencyTestUser);
@@ -50,6 +55,12 @@ namespace Framework.Tests
         {
             this.driver.Close();
             this.driver.Quit();
+        }
+
+        private void SetGenderToTestUsers(Gender testUserGender, Gender emergencyTestUserGender)
+        {
+            this.testUser.Gender = testUserGender;
+            this.emergencyTestUser.Gender = emergencyTestUserGender;
         }
     }
 }

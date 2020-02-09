@@ -4,6 +4,8 @@
 
     using Core.Enums;
 
+    using Models;
+
     using NUnit.Framework;
 
     using OpenQA.Selenium;

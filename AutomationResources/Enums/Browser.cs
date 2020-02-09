@@ -1,4 +1,4 @@
-﻿namespace Framework.Core.Enums
+﻿namespace AutomationResources.Enums
 {
     public enum Browser
     {

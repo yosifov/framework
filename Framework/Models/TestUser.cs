@@ -1,4 +1,4 @@
-﻿namespace Framework.Pages
+﻿namespace Framework.Models
 {
     using Framework.Core.Enums;
 
