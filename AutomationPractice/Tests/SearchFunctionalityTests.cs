@@ -25,6 +25,7 @@ namespace AutomationPractice.Tests
             this.homePage.Open();
             var searchPage = this.homePage.Search(searchPhrase);
             Assert.That(searchPage.SearchResultsCount > 0, $"There is no search results for {searchPhrase}");
+            Assert.That(searchPage.Contains(searchPhrase));
         }
 
         [Test]

@@ -24,5 +24,8 @@
                 return int.Parse(resultsText);
             }
         }
+
+        public bool Contains(string searchPhrase) 
+            => this.SearchResults.Any(r => r.FindElement(By.ClassName("product-name")).Text.ToLower().Contains(searchPhrase.ToLower()));
     }
 }
