@@ -22,4 +22,10 @@
     <ProjectReference Include="..\AutomationResources\AutomationResources.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\example.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
