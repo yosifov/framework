@@ -1,22 +1,19 @@
 ﻿namespace AutomationPractice.Pages
 {
-    using System;
-
+    using AutomationPractice.Helpers;
     using AutomationPractice.Models;
 
+    using AventStack.ExtentReports;
+
     using OpenQA.Selenium;
-    using OpenQA.Selenium.Support.UI;
 
     using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
 
     public class ContactPage : BasePage
     {
-        private WebDriverWait wait;
-
         public ContactPage(IWebDriver driver)
             : base(driver)
         {
-            this.wait = new WebDriverWait(this.Driver, TimeSpan.FromSeconds(5));
         }
 
         public string Url => "http://automationpractice.com/index.php?controller=contact";
@@ -25,7 +22,7 @@
 
         public bool IsVisible => this.Driver.Title == this.ExpectedPageTitle;
 
-        public IWebElement SuccessMessage => this.wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@class='alert alert-success']")));
+        public IWebElement SuccessMessage => this.Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@class='alert alert-success']")));
 
         public IWebElement SubjectSelect => this.Driver.FindElement(By.Id("id_contact"));
 
@@ -44,23 +41,35 @@
         public void Open()
         {
             this.Driver.Navigate().GoToUrl(this.Url);
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Open URL => {this.Url}");
         }
 
         public void SubmitForm(ContactUser contactUser)
         {
             this.SubjectSelect.Click();
             this.SubjectSelect.FindElement(By.XPath($"option[@value={(int)contactUser.Subject}]")).Click();
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Select subject => {contactUser.Subject}");
+
             this.EmailField.SendKeys(contactUser.Email);
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Enter email => {contactUser.Email}");
+
             if (contactUser.OrderReference != null)
             {
                 this.OrderReference.SendKeys(contactUser.OrderReference);
+                Reporter.LogTestStepForBugLogger(Status.Info, $"Enter order reference => {this.OrderReference.Text}");
             }
+
             if (contactUser.FileAttach != null)
             {
                 this.FileAttach.SendKeys(contactUser.FileAttach);
+                Reporter.LogTestStepForBugLogger(Status.Info, $"Attach filename => {contactUser.FileAttach}");
             }
+
             this.MessageTextArea.SendKeys(contactUser.Message);
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Enter message text => {contactUser.Message}");
+
             this.SubmitButton.Click();
+            Reporter.LogTestStepForBugLogger(Status.Info, "Submit contact form");
         }
     }
 }

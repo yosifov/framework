@@ -2,7 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+
     using OpenQA.Selenium;
+
+    using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
 
     public class SearchPage : BasePage
     {
@@ -19,7 +22,7 @@
         {
             get
             {
-                string resultsText = this.Driver.FindElement(By.ClassName("heading-counter")).Text.Split().FirstOrDefault();
+                string resultsText = this.Wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("heading-counter"))).Text.Split().FirstOrDefault();
 
                 return int.Parse(resultsText);
             }

@@ -5,6 +5,7 @@
     using NUnit.Framework;
 
     [TestFixture]
+    [Category("Slider Feature")]
     public class SliderFeatureTests : BaseTest
     {
         private HomePage homePage;

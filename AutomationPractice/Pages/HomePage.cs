@@ -4,9 +4,12 @@
     using NUnit.Framework;
 
     using OpenQA.Selenium;
+    using NLog;
 
     public class HomePage : BasePage
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public HomePage(IWebDriver driver)
             : base(driver)
         {
@@ -29,13 +32,14 @@
         {
             this.Driver.Navigate().GoToUrl(this.Url);
             Assert.That(this.IsVisible);
+            logger.Info($"Open URL => {this.Url}");
         }
 
         public SearchPage Search(string searchPhrase)
         {
             this.SearchField.SendKeys(searchPhrase);
             this.SearchButton.Click();
-
+            logger.Info($"Search for an item in the search bar => {searchPhrase}");
             return new SearchPage(this.Driver);
         }
     }
