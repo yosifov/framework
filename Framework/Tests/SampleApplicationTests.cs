@@ -27,7 +27,7 @@ namespace Framework.Tests
         public void Setup()
         {
             this.browser = Browser.Chrome;
-            this.driver = WebDriverFactory.Create(this.browser);
+            this.driver = WebDriverFactory.CreateLocalDriver(this.browser);
             this.driver.Manage().Window.Maximize();
             this.sampleApplicationPage = new SampleApplicationPage(this.driver);
             this.testUser = new TestUser("Kamen", "Yosifov", Gender.Male);

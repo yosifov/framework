@@ -2,6 +2,9 @@
 {
     public enum Browser
     {
-        Chrome
+        Chrome,
+        Firefox,
+        Edge,
+        Safari
     }
 }
