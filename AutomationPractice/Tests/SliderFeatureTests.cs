@@ -3,12 +3,19 @@
     using Pages;
     using Enums;
     using NUnit.Framework;
+    using AutomationResources.Enums;
 
-    [TestFixture]
+    [TestFixture(Browser.Chrome, "latest", "Windows 10", "1920x1080")]
     [Category("Slider Feature")]
+    [Parallelizable]
     public class SliderFeatureTests : BaseTest
     {
         private HomePage homePage;
+
+        public SliderFeatureTests(Browser browser, string version, string os, string screenResolution) 
+            : base(browser, version, os, screenResolution)
+        {
+        }
 
         [SetUp]
         public void SliderSetUp()

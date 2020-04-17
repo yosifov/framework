@@ -1,14 +1,17 @@
-﻿using System;
-using NLog;
-using NUnit.Framework;
-using NUnit.Framework.Interfaces;
-using OpenQA.Selenium;
-
-namespace AutomationPractice.Helpers
+﻿namespace AutomationPractice.Helpers
 {
+    using System;
+
+    using NLog;
+
+    using NUnit.Framework;
+    using NUnit.Framework.Interfaces;
+
+    using OpenQA.Selenium;
+
     public class ScreenshotTaker
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IWebDriver driver;
         private readonly TestContext testContext;
         private string screenshotFileName;
@@ -19,6 +22,7 @@ namespace AutomationPractice.Helpers
             {
                 return;
             }
+
             this.driver = driver;
             this.testContext = testContext;
             this.screenshotFileName = this.testContext.Test.Name;
@@ -37,22 +41,23 @@ namespace AutomationPractice.Helpers
 
         public string TakeScreenshot(string screenshotFileName)
         {
-            var ss = GetScreenshot();
-            var successfullySaved = TryToSaveScreenshot(screenshotFileName, ss);
+            var ss = this.GetScreenshot();
+            var successfullySaved = this.TryToSaveScreenshot(screenshotFileName, ss);
 
-            return successfullySaved ? this.ScreenshotFilePath : "";
+            return successfullySaved ? this.ScreenshotFilePath : string.Empty;
         }
 
         public bool TakeScreenshotForFailure()
         {
             this.screenshotFileName = $"FAIL_{this.screenshotFileName}";
 
-            var ss = GetScreenshot();
+            var ss = this.GetScreenshot();
             var successfullySaved = this.TryToSaveScreenshot(this.screenshotFileName, ss);
             if (successfullySaved)
             {
-                logger.Error($"Screenshot of error => {this.ScreenshotFilePath}");
+                Logger.Error($"Screenshot of error => {this.ScreenshotFilePath}");
             }
+
             return successfullySaved;
         }
 
@@ -70,9 +75,9 @@ namespace AutomationPractice.Helpers
             }
             catch (Exception ex)
             {
-                logger.Error(ex.InnerException);
-                logger.Error(ex.Message);
-                logger.Error(ex.StackTrace);
+                Logger.Error(ex.InnerException);
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
                 return false;
             }
         }

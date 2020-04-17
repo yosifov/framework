@@ -1,14 +1,21 @@
 namespace AutomationPractice.Tests
 {
+    using AutomationResources.Enums;
     using NUnit.Framework;
 
     using Pages;
 
-    [TestFixture]
+    [TestFixture(Browser.Chrome, "latest", "Windows 10", "1920x1080")]
     [Category("Search Functionality")]
+    [Parallelizable]
     public class SearchFunctionalityTests : BaseTest
     {
         private HomePage homePage;
+
+        public SearchFunctionalityTests(Browser browser, string version, string os, string screenResolution) 
+            : base(browser, version, os, screenResolution)
+        {
+        }
 
         [SetUp]
         public void Setup()

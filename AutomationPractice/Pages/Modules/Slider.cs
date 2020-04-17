@@ -3,6 +3,9 @@
     using System;
 
     using AutomationPractice.Enums;
+    using AutomationPractice.Helpers;
+
+    using AventStack.ExtentReports;
 
     using OpenQA.Selenium;
 
@@ -25,11 +28,14 @@
             {
                 case SliderDirection.Left:
                     this.LeftButton.Click();
+                    Reporter.LogPassingTestStepForBuglLogger($"Slide to the {direction}");
                     break;
                 case SliderDirection.Right:
                     this.RightButton.Click();
+                    Reporter.LogPassingTestStepForBuglLogger($"Slide to the {direction}");
                     break;
                 default:
+                    Reporter.LogTestStepForBugLogger(Status.Fail, "Unable to change the slide. Invalid direction.");
                     throw new InvalidOperationException("Invalid slider change direction");
             }
         }

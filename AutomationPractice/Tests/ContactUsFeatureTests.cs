@@ -1,18 +1,26 @@
 ﻿namespace AutomationPractice.Tests
 {
     using System.IO;
+
     using AutomationPractice.Enums;
+    using AutomationResources.Enums;
     using Models;
 
     using NUnit.Framework;
 
     using Pages;
 
-    [TestFixture]
+    [TestFixture(Browser.Chrome, "latest", "Windows 10", "1920x1080")]
     [Category("Contact Us Feature")]
+    [Parallelizable]
     public class ContactUsFeatureTests : BaseTest
     {
         private ContactPage contactPage;
+
+        public ContactUsFeatureTests(Browser browser, string version, string os, string screenResolution) 
+            : base(browser, version, os, screenResolution)
+        {
+        }
 
         [SetUp]
         public void ContactUsSetUp()

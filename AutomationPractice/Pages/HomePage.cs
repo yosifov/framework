@@ -1,15 +1,17 @@
 ﻿namespace AutomationPractice.Pages
 {
-    using Pages.Modules;
+    using AutomationPractice.Helpers;
+
+    using AventStack.ExtentReports;
+
     using NUnit.Framework;
 
     using OpenQA.Selenium;
-    using NLog;
+
+    using Pages.Modules;
 
     public class HomePage : BasePage
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
         public HomePage(IWebDriver driver)
             : base(driver)
         {
@@ -24,23 +26,47 @@
 
         public IWebElement SearchButton => this.Driver.FindElement(By.XPath("//*[@id='searchbox']//button"));
 
-        public bool IsVisible => this.Driver.Title == this.ExpectedPageTitle;
+        public bool IsVisible
+        {
+            get
+            {
+                if (this.Driver.Title == this.ExpectedPageTitle)
+                {
+                    Reporter.LogPassingTestStepForBuglLogger("Validate that the Home page is visible.");
+                    return true;
+                }
+                else
+                {
+                    Reporter.LogTestStepForBugLogger(Status.Fail, $"Home page is not visible. Expected page title => {this.ExpectedPageTitle}, but is {this.Driver.Title}.");
+                    return false;
+                }
+            }
+        }
 
         public Slider Slider { get; private set; }
+
+        public IWebElement SignInButton => this.Driver.FindElement(By.ClassName("login"));
 
         public void Open()
         {
             this.Driver.Navigate().GoToUrl(this.Url);
             Assert.That(this.IsVisible);
-            logger.Info($"Open URL => {this.Url}");
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Open Home page => {this.Url}");
         }
 
         public SearchPage Search(string searchPhrase)
         {
             this.SearchField.SendKeys(searchPhrase);
             this.SearchButton.Click();
-            logger.Info($"Search for an item in the search bar => {searchPhrase}");
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Search for an item in the search bar => {searchPhrase}");
             return new SearchPage(this.Driver);
+        }
+
+        public LoginPage GoToSignInPage()
+        {
+            this.SignInButton.Click();
+            Reporter.LogTestStepForBugLogger(Status.Info, $"Click on SignIn button and load Login page.");
+            return new LoginPage(this.Driver);
         }
     }
 }

@@ -6,20 +6,38 @@
 
     using AutomationResources;
     using AutomationResources.Enums;
+
     using NLog;
 
     using NUnit.Framework;
-
+    using NUnit.Framework.Interfaces;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Remote;
 
     [TestFixture]
     public abstract class BaseTest
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        protected IWebDriver Driver { get; set; }
+        private Browser browser;
+
+        private string version;
+
+        private string os;
+
+        private string screenResolution;
+
+        public BaseTest(Browser browser, string version, string os, string screenResolution = "1280x1024")
+        {
+            this.browser = browser;
+            this.version = version;
+            this.os = os;
+            this.screenResolution = screenResolution;
+        }
 
         public TestContext TestContext { get; set; }
+
+        protected IWebDriver Driver { get; set; }
 
         private ScreenshotTaker ScreenshotTaker { get; set; }
 
@@ -32,11 +50,11 @@
         [SetUp]
         public void BaseSetup()
         {
-            logger.Debug("*************************** TEST STARTED");
-            logger.Debug("*************************** TEST STARTED");
+            Logger.Debug("*************************** TEST STARTED");
+            Logger.Debug("*************************** TEST STARTED");
             this.TestContext = TestContext.CurrentContext;
             Reporter.AddTestCaseMetadataToHtmlReport(this.TestContext);
-            this.Driver = WebDriverFactory.Create(Browser.Chrome);
+            this.Driver = WebDriverFactory.CreateSauceDriver(this.browser, this.version, this.os, this.screenResolution);
             this.Driver.Manage().Window.Maximize();
             this.ScreenshotTaker = new ScreenshotTaker(this.Driver, this.TestContext);
         }
@@ -44,7 +62,14 @@
         [TearDown]
         public void BaseTearDown()
         {
-            logger.Debug(this.GetType().FullName + " started a method tear down");
+            if (this.Driver.GetType() == typeof(RemoteWebDriver))
+            {
+                var passed = TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Passed;
+                ((IJavaScriptExecutor)this.Driver).ExecuteScript("sauce:job-result=" + (passed ? "passed" : "failed"));
+                this.Driver?.Quit();
+            }
+
+            Logger.Debug(this.GetType().FullName + " started a method tear down");
 
             try
             {
@@ -52,17 +77,17 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex.Source);
-                logger.Error(ex.StackTrace);
-                logger.Error(ex.InnerException);
-                logger.Error(ex.Message);
+                Logger.Error(ex.Source);
+                Logger.Error(ex.StackTrace);
+                Logger.Error(ex.InnerException);
+                Logger.Error(ex.Message);
             }
             finally
             {
                 this.StopBrowser();
-                logger.Debug(this.TestContext.Test.Name);
-                logger.Debug("*************************** TEST STOPPED");
-                logger.Debug("*************************** TEST STOPPED");
+                Logger.Debug(this.TestContext.Test.Name);
+                Logger.Debug("*************************** TEST STOPPED");
+                Logger.Debug("*************************** TEST STOPPED");
             }
         }
 
@@ -75,7 +100,7 @@
             }
             else
             {
-                Reporter.ReportTestOutcome("");
+                Reporter.ReportTestOutcome(string.Empty);
             }
         }
 
@@ -85,10 +110,11 @@
             {
                 return;
             }
+
             this.Driver.Close();
             this.Driver.Quit();
             this.Driver = null;
-            logger.Trace("Browser stopped successfully.");
+            Logger.Trace("Browser stopped successfully.");
         }
     }
 }

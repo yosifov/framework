@@ -15,13 +15,13 @@
     {
         private static readonly Logger TheLogger = LogManager.GetCurrentClassLogger();
 
+        public static string LatestResultsReportFolder { get; set; }
+
         private static ExtentReports ReportManager { get; set; }
 
-        private static string ApplicationDebuggingFolder => "c://temp/CreatingReports";
+        private static string ApplicationDebuggingFolder => "c://temp/AutomationPractice";
 
         private static string HtmlReportFullPath { get; set; }
-
-        public static string LatestResultsReportFolder { get; set; }
 
         private static TestContext MyTestContext { get; set; }
 
@@ -38,16 +38,6 @@
             ReportManager.AttachReporter(htmlReporter);
         }
 
-        private static void CreateReportDirectory()
-        {
-            var filePath = Path.GetFullPath(ApplicationDebuggingFolder);
-            LatestResultsReportFolder = Path.Combine(filePath, DateTime.Now.ToString("MMdd_HHmm"));
-            Directory.CreateDirectory(LatestResultsReportFolder);
-
-            HtmlReportFullPath = $"{LatestResultsReportFolder}\\TestResults.html";
-            TheLogger.Trace($"Full path of HTML report => {HtmlReportFullPath}");
-        }
-
         public static void AddTestCaseMetadataToHtmlReport(TestContext testContext)
         {
             MyTestContext = testContext;
@@ -58,6 +48,12 @@
         {
             TheLogger.Info(message);
             CurrentTestCase.Log(Status.Pass, message);
+        }
+
+        public static void LogTestStepForBugLogger(Status status, string message)
+        {
+            TheLogger.Info(message);
+            CurrentTestCase.Log(status, message);
         }
 
         public static void ReportTestOutcome(string screenshotPath)
@@ -86,10 +82,14 @@
             ReportManager.Flush();
         }
 
-        public static void LogTestStepForBugLogger(Status status, string message)
+        private static void CreateReportDirectory()
         {
-            TheLogger.Info(message);
-            CurrentTestCase.Log(status, message);
+            var filePath = Path.GetFullPath(ApplicationDebuggingFolder);
+            LatestResultsReportFolder = Path.Combine(filePath, DateTime.Now.ToString("MMdd_HHmm"));
+            Directory.CreateDirectory(LatestResultsReportFolder);
+
+            HtmlReportFullPath = $"{LatestResultsReportFolder}\\TestResults.html";
+            TheLogger.Trace($"Full path of HTML report => {HtmlReportFullPath}");
         }
     }
 }
