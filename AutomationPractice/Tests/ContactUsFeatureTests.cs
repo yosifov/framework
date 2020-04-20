@@ -4,21 +4,22 @@
 
     using AutomationPractice.Enums;
     using AutomationResources.Enums;
+    using AutomationResources.Models;
     using Models;
 
     using NUnit.Framework;
 
     using Pages;
 
-    [TestFixture(Browser.Chrome, "latest", "Windows 10", "1920x1080")]
+    [TestFixture(Browser.Chrome, "latest", "Windows 10", "Kamen", "landscape", "1920x1080")]
     [Category("Contact Us Feature")]
     [Parallelizable]
     public class ContactUsFeatureTests : BaseTest
     {
         private ContactPage contactPage;
 
-        public ContactUsFeatureTests(Browser browser, string version, string os, string screenResolution) 
-            : base(browser, version, os, screenResolution)
+        public ContactUsFeatureTests(Browser browser, string version, string os, string deviceName, string deviceOrientation, string screenResolution) 
+            : base(new SauceConfigurations(browser, version, os, deviceName, deviceOrientation, screenResolution))
         {
         }
 

@@ -4,9 +4,10 @@
 
     using AutomationPractice.Pages;
     using AutomationResources.Enums;
+    using AutomationResources.Models;
     using NUnit.Framework;
 
-    [TestFixture(Browser.Firefox, "latest", "Windows 10")]
+    [TestFixture(Browser.Firefox, "latest", "Windows 10", "Kamen", "landscape")]
     [Category("Login Functionality")]
     [Parallelizable]
     public class LoginFunctionalityTests : BaseTest
@@ -14,8 +15,8 @@
         private HomePage homePage;
         private LoginPage loginPage;
 
-        public LoginFunctionalityTests(Browser browser, string version, string os) 
-            : base(browser, version, os)
+        public LoginFunctionalityTests(Browser browser, string version, string os, string deviceName, string deviceOrientation) 
+            : base(new SauceConfigurations(browser, version, os, deviceName, deviceOrientation))
         {
         }
 

@@ -1,19 +1,23 @@
 ﻿namespace AutomationPractice.Tests
 {
-    using Pages;
-    using Enums;
-    using NUnit.Framework;
     using AutomationResources.Enums;
+    using AutomationResources.Models;
 
-    [TestFixture(Browser.Chrome, "latest", "Windows 10", "1920x1080")]
+    using Enums;
+
+    using NUnit.Framework;
+
+    using Pages;
+
+    [TestFixture(Browser.Chrome, "latest", "Windows 10", "Kamen", "landscape", "1920x1080")]
     [Category("Slider Feature")]
     [Parallelizable]
     public class SliderFeatureTests : BaseTest
     {
         private HomePage homePage;
 
-        public SliderFeatureTests(Browser browser, string version, string os, string screenResolution) 
-            : base(browser, version, os, screenResolution)
+        public SliderFeatureTests(Browser browser, string version, string os, string deviceName, string deviceOrientation, string screenResolution) 
+            : base(new SauceConfigurations(browser, version, os, deviceName, deviceOrientation, screenResolution))
         {
         }
 

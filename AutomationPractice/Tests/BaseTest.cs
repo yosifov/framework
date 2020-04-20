@@ -5,12 +5,13 @@
     using AutomationPractice.Helpers;
 
     using AutomationResources;
-    using AutomationResources.Enums;
+    using AutomationResources.Models;
 
     using NLog;
 
     using NUnit.Framework;
     using NUnit.Framework.Interfaces;
+
     using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
 
@@ -19,20 +20,11 @@
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private Browser browser;
+        private SauceConfigurations sauceConfigurations;
 
-        private string version;
-
-        private string os;
-
-        private string screenResolution;
-
-        public BaseTest(Browser browser, string version, string os, string screenResolution = "1280x1024")
+        public BaseTest(SauceConfigurations sauceConfigurations)
         {
-            this.browser = browser;
-            this.version = version;
-            this.os = os;
-            this.screenResolution = screenResolution;
+            this.sauceConfigurations = sauceConfigurations;
         }
 
         public TestContext TestContext { get; set; }
@@ -54,7 +46,7 @@
             Logger.Debug("*************************** TEST STARTED");
             this.TestContext = TestContext.CurrentContext;
             Reporter.AddTestCaseMetadataToHtmlReport(this.TestContext);
-            this.Driver = WebDriverFactory.CreateSauceDriver(this.browser, this.version, this.os, this.screenResolution);
+            this.Driver = WebDriverFactory.CreateSauceDriver(this.sauceConfigurations);
             this.Driver.Manage().Window.Maximize();
             this.ScreenshotTaker = new ScreenshotTaker(this.Driver, this.TestContext);
         }
@@ -66,6 +58,7 @@
             {
                 var passed = TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Passed;
                 ((IJavaScriptExecutor)this.Driver).ExecuteScript("sauce:job-result=" + (passed ? "passed" : "failed"));
+                ((IJavaScriptExecutor)this.Driver).ExecuteScript("sauce:context=" + TestContext.CurrentContext.Result.Message);
                 this.Driver?.Quit();
             }
 

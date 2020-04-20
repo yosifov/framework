@@ -3,7 +3,7 @@ namespace AutomationResources
     using System;
     using System.Collections.Generic;
     using System.IO;
-
+    using AutomationResources.Models;
     using Enums;
 
     using NUnit.Framework;
@@ -33,48 +33,50 @@ namespace AutomationResources
             }
         }
 
-        public static IWebDriver CreateSauceDriver(Browser browser, string version, string os, string screenResolution)
+        public static IWebDriver CreateSauceDriver(SauceConfigurations sauceConfigurations)
         {
             var sauceOptions = new Dictionary<string, object>
             {
-                { "screenResolution", screenResolution },
+                { "screenResolution", sauceConfigurations.ScreenResolution },
                 { "username", SauceUserName },
                 { "accessKey", SauceAccessKey },
+                { "deviceName", sauceConfigurations.DeviceName },
+                { "deviceOrientation", sauceConfigurations.DeviceOrientation },
                 { "name", TestContext.CurrentContext.Test.Name }
             };
 
-            switch (browser)
+            switch (sauceConfigurations.Browser)
             {
                 case Browser.Chrome:
                     var chromeOptions = new ChromeOptions
                     {
                         UseSpecCompliantProtocol = true,
-                        PlatformName = os,
-                        BrowserVersion = version
+                        PlatformName = sauceConfigurations.Os,
+                        BrowserVersion = sauceConfigurations.Version
                     };
                     chromeOptions.AddAdditionalCapability("sauce:options", sauceOptions, true);
                     return new RemoteWebDriver(new Uri(SauceRemoteAddress), chromeOptions);
                 case Browser.Firefox:
                     var firefoxOptions = new FirefoxOptions
                     {
-                        PlatformName = os,
-                        BrowserVersion = version
+                        PlatformName = sauceConfigurations.Os,
+                        BrowserVersion = sauceConfigurations.Version
                     };
                     firefoxOptions.AddAdditionalCapability("sauce:options", sauceOptions, true);
                     return new RemoteWebDriver(new Uri(SauceRemoteAddress), firefoxOptions);
                 case Browser.Safari:
                     var safariOptions = new SafariOptions
                     {
-                        PlatformName = os,
-                        BrowserVersion = version
+                        PlatformName = sauceConfigurations.Os,
+                        BrowserVersion = sauceConfigurations.Version
                     };
                     safariOptions.AddAdditionalCapability("sauce:options", sauceOptions);
                     return new RemoteWebDriver(new Uri(SauceRemoteAddress), safariOptions);
                 case Browser.Edge:
                     var edgeOptions = new EdgeOptions
                     {
-                        PlatformName = os,
-                        BrowserVersion = version
+                        PlatformName = sauceConfigurations.Os,
+                        BrowserVersion = sauceConfigurations.Version
                     };
                     edgeOptions.AddAdditionalCapability("sauce:options", sauceOptions);
                     return new RemoteWebDriver(new Uri(SauceRemoteAddress), edgeOptions);
