@@ -1,4 +1,4 @@
-﻿namespace AutomationPractice.Helpers
+﻿namespace AutomationResources.Helpers
 {
     using System;
     using System.IO;

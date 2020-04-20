@@ -3,7 +3,7 @@
     using System;
 
     using AutomationPractice.Enums;
-    using AutomationPractice.Helpers;
+    using AutomationResources.Helpers;
 
     using AventStack.ExtentReports;
 

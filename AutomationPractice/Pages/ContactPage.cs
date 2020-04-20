@@ -1,7 +1,7 @@
 ﻿namespace AutomationPractice.Pages
 {
     using System.Text;
-    using AutomationPractice.Helpers;
+    using AutomationResources.Helpers;
     using AutomationPractice.Models;
 
     using OpenQA.Selenium;

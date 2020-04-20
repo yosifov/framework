@@ -2,7 +2,7 @@
 {
     using System;
 
-    using AutomationPractice.Helpers;
+    using AutomationResources.Helpers;
 
     using AutomationResources;
     using AutomationResources.Models;

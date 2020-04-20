@@ -1,6 +1,6 @@
 ﻿namespace AutomationPractice.Pages
 {
-    using AutomationPractice.Helpers;
+    using AutomationResources.Helpers;
 
     using AventStack.ExtentReports;
 
