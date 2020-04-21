@@ -17,7 +17,7 @@ namespace AutomationResources
 
     public class WebDriverFactory
     {
-        private const string ChromeDriverPath = @"\Drivers";
+        private const string DriverPath = @"\Drivers";
         private const string SauceUserName = "galam65848";
         private const string SauceAccessKey = "c237300a-7980-4f22-acdf-1dfdf8b65d82";
         private const string SauceRemoteAddress = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub";
@@ -27,7 +27,9 @@ namespace AutomationResources
             switch (browser)
             {
                 case Browser.Chrome:
-                    return new ChromeDriver(Directory.GetCurrentDirectory() + ChromeDriverPath);
+                    return new ChromeDriver(Directory.GetCurrentDirectory() + DriverPath);
+                case Browser.Firefox:
+                    return new FirefoxDriver(Directory.GetCurrentDirectory() + DriverPath);
                 default:
                     throw new ArgumentException("Invalid browser");
             }
